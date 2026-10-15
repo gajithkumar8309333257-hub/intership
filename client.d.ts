@@ -1,123 +1,285 @@
-import { URL } from 'node:url'
-import Dispatcher from './dispatcher'
-import buildConnector from './connector'
-import TClientStats from './client-stats'
+/// <reference path="./types/importMeta.d.ts" />
 
-type ClientConnectOptions = Omit<Dispatcher.ConnectOptions, 'origin'>
+// virtual modules
+declare module 'vite/modulepreload-polyfill' {}
 
-/**
- * A basic HTTP/1.1 client, mapped on top a single TCP/TLS connection. Pipelining is disabled by default.
- */
-export class Client extends Dispatcher {
-  constructor (url: string | URL, options?: Client.Options)
-  /** Property to get and set the pipelining factor. */
-  pipelining: number
-  /** `true` after `client.close()` has been called. */
-  closed: boolean
-  /** `true` after `client.destroyed()` has been called or `client.close()` has been called and the client shutdown has completed. */
-  destroyed: boolean
-  /** Aggregate stats for a Client. */
-  readonly stats: TClientStats
+// CSS modules
+type CSSModuleClasses = { readonly [key: string]: string }
 
-  // Override dispatcher APIs.
-  override connect (
-    options: ClientConnectOptions
-  ): Promise<Dispatcher.ConnectData>
-  override connect (
-    options: ClientConnectOptions,
-    callback: (err: Error | null, data: Dispatcher.ConnectData) => void
-  ): void
+declare module '*.module.css' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.scss' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.sass' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.less' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.styl' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.stylus' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.pcss' {
+  const classes: CSSModuleClasses
+  export default classes
+}
+declare module '*.module.sss' {
+  const classes: CSSModuleClasses
+  export default classes
 }
 
-export declare namespace Client {
-  export interface OptionsInterceptors {
-    Client: readonly Dispatcher.DispatchInterceptor[];
-  }
-  export interface Options {
-    /** TODO */
-    interceptors?: OptionsInterceptors;
-    /** The maximum length of request headers in bytes. Default: Node.js' `--max-http-header-size` or `16384` (16KiB). */
-    maxHeaderSize?: number;
-    /** The amount of time, in milliseconds, the parser will wait to receive the complete HTTP headers (Node 14 and above only). Default: `300e3` milliseconds (300s). */
-    headersTimeout?: number;
-    /** @deprecated unsupported socketTimeout, use headersTimeout & bodyTimeout instead */
-    socketTimeout?: never;
-    /** @deprecated unsupported requestTimeout, use headersTimeout & bodyTimeout instead */
-    requestTimeout?: never;
-    /** TODO */
-    connectTimeout?: number;
-    /** The timeout after which a request will time out, in milliseconds. Monitors time between receiving body data. Use `0` to disable it entirely. Default: `300e3` milliseconds (300s). */
-    bodyTimeout?: number;
-    /** @deprecated unsupported idleTimeout, use keepAliveTimeout instead */
-    idleTimeout?: never;
-    /** @deprecated unsupported keepAlive, use pipelining=0 instead */
-    keepAlive?: never;
-    /** the timeout, in milliseconds, after which a socket without active requests will time out. Monitors time between activity on a connected socket. This value may be overridden by *keep-alive* hints from the server. Default: `4e3` milliseconds (4s). */
-    keepAliveTimeout?: number;
-    /** @deprecated unsupported maxKeepAliveTimeout, use keepAliveMaxTimeout instead */
-    maxKeepAliveTimeout?: never;
-    /** the maximum allowed `idleTimeout`, in milliseconds, when overridden by *keep-alive* hints from the server. Default: `600e3` milliseconds (10min). */
-    keepAliveMaxTimeout?: number;
-    /** A number of milliseconds subtracted from server *keep-alive* hints when overriding `idleTimeout` to account for timing inaccuracies caused by e.g. transport latency. Default: `1e3` milliseconds (1s). */
-    keepAliveTimeoutThreshold?: number;
-    /** TODO */
-    socketPath?: string;
-    /** The amount of concurrent requests to be sent over the single TCP/TLS connection according to [RFC7230](https://tools.ietf.org/html/rfc7230#section-6.3.2). Default: `1`. */
-    pipelining?: number;
-    /** @deprecated use the connect option instead */
-    tls?: never;
-    /** If `true`, an error is thrown when the request content-length header doesn't match the length of the request body. Default: `true`. */
-    strictContentLength?: boolean;
-    /** TODO */
-    maxCachedSessions?: number;
-    /** TODO */
-    connect?: Partial<buildConnector.BuildOptions> | buildConnector.connector;
-    /** TODO */
-    maxRequestsPerClient?: number;
-    /** TODO */
-    localAddress?: string;
-    /** Max response body size in bytes, -1 is disabled */
-    maxResponseSize?: number;
-    /** Enables a family autodetection algorithm that loosely implements section 5 of RFC 8305. */
-    autoSelectFamily?: boolean;
-    /** The amount of time in milliseconds to wait for a connection attempt to finish before trying the next address when using the `autoSelectFamily` option. */
-    autoSelectFamilyAttemptTimeout?: number;
-    /**
-     * @description Enables support for H2 if the server has assigned bigger priority to it through ALPN negotiation.
-     * @default false
-     */
-    allowH2?: boolean;
-    /**
-     * @description Dictates the maximum number of concurrent streams for a single H2 session. It can be overridden by a SETTINGS remote frame.
-     * @default 100
-     */
-    maxConcurrentStreams?: number;
-    /**
-     * @description Sets the HTTP/2 stream-level flow-control window size (SETTINGS_INITIAL_WINDOW_SIZE).
-     * @default 262144
-     */
-    initialWindowSize?: number;
-    /**
-     * @description Sets the HTTP/2 connection-level flow-control window size (ClientHttp2Session.setLocalWindowSize).
-     * @default 524288
-     */
-    connectionWindowSize?: number;
-    /**
-     * @description Time interval between PING frames dispatch
-     * @default 60000
-     */
-    pingInterval?: number;
-  }
-  export interface SocketInfo {
-    localAddress?: string
-    localPort?: number
-    remoteAddress?: string
-    remotePort?: number
-    remoteFamily?: string
-    timeout?: number
-    bytesWritten?: number
-    bytesRead?: number
-  }
+// CSS
+declare module '*.css' {}
+declare module '*.scss' {}
+declare module '*.sass' {}
+declare module '*.less' {}
+declare module '*.styl' {}
+declare module '*.stylus' {}
+declare module '*.pcss' {}
+declare module '*.sss' {}
+
+// Built-in asset types
+// see `src/node/constants.ts`
+
+// images
+declare module '*.apng' {
+  const src: string
+  export default src
+}
+declare module '*.bmp' {
+  const src: string
+  export default src
+}
+declare module '*.png' {
+  const src: string
+  export default src
+}
+declare module '*.jpg' {
+  const src: string
+  export default src
+}
+declare module '*.jpeg' {
+  const src: string
+  export default src
+}
+declare module '*.jfif' {
+  const src: string
+  export default src
+}
+declare module '*.pjpeg' {
+  const src: string
+  export default src
+}
+declare module '*.pjp' {
+  const src: string
+  export default src
+}
+declare module '*.gif' {
+  const src: string
+  export default src
+}
+declare module '*.svg' {
+  const src: string
+  export default src
+}
+declare module '*.ico' {
+  const src: string
+  export default src
+}
+declare module '*.webp' {
+  const src: string
+  export default src
+}
+declare module '*.avif' {
+  const src: string
+  export default src
+}
+declare module '*.cur' {
+  const src: string
+  export default src
+}
+declare module '*.jxl' {
+  const src: string
+  export default src
 }
 
-export default Client
+// media
+declare module '*.mp4' {
+  const src: string
+  export default src
+}
+declare module '*.webm' {
+  const src: string
+  export default src
+}
+declare module '*.ogg' {
+  const src: string
+  export default src
+}
+declare module '*.mp3' {
+  const src: string
+  export default src
+}
+declare module '*.wav' {
+  const src: string
+  export default src
+}
+declare module '*.flac' {
+  const src: string
+  export default src
+}
+declare module '*.aac' {
+  const src: string
+  export default src
+}
+declare module '*.opus' {
+  const src: string
+  export default src
+}
+declare module '*.mov' {
+  const src: string
+  export default src
+}
+declare module '*.m4a' {
+  const src: string
+  export default src
+}
+declare module '*.vtt' {
+  const src: string
+  export default src
+}
+
+// fonts
+declare module '*.woff' {
+  const src: string
+  export default src
+}
+declare module '*.woff2' {
+  const src: string
+  export default src
+}
+declare module '*.eot' {
+  const src: string
+  export default src
+}
+declare module '*.ttf' {
+  const src: string
+  export default src
+}
+declare module '*.otf' {
+  const src: string
+  export default src
+}
+
+// other
+declare module '*.webmanifest' {
+  const src: string
+  export default src
+}
+declare module '*.pdf' {
+  const src: string
+  export default src
+}
+declare module '*.txt' {
+  const src: string
+  export default src
+}
+
+// wasm?init
+declare module '*.wasm?init' {
+  const initWasm: (
+    options?: WebAssembly.Imports,
+  ) => Promise<WebAssembly.Instance>
+  export default initWasm
+}
+
+// wasm (ESM integration)
+declare module '*.wasm' {}
+
+// web worker
+declare module '*?worker' {
+  const workerConstructor: {
+    new (options?: { name?: string }): Worker
+  }
+  export default workerConstructor
+}
+
+declare module '*?worker&inline' {
+  const workerConstructor: {
+    new (options?: { name?: string }): Worker
+  }
+  export default workerConstructor
+}
+
+declare module '*?worker&url' {
+  const src: string
+  export default src
+}
+
+declare module '*?sharedworker' {
+  const sharedWorkerConstructor: {
+    new (options?: { name?: string }): SharedWorker
+  }
+  export default sharedWorkerConstructor
+}
+
+declare module '*?sharedworker&inline' {
+  const sharedWorkerConstructor: {
+    new (options?: { name?: string }): SharedWorker
+  }
+  export default sharedWorkerConstructor
+}
+
+declare module '*?sharedworker&url' {
+  const src: string
+  export default src
+}
+
+declare module '*?raw' {
+  const src: string
+  export default src
+}
+
+declare module '*?url' {
+  const src: string
+  export default src
+}
+
+declare module '*?inline' {
+  const src: string
+  export default src
+}
+
+declare module '*?no-inline' {
+  const src: string
+  export default src
+}
+
+declare module '*?url&inline' {
+  const src: string
+  export default src
+}
+
+declare module '*?url&no-inline' {
+  const src: string
+  export default src
+}
+
+declare interface VitePreloadErrorEvent extends Event {
+  payload: Error
+}
+
+declare interface WindowEventMap {
+  'vite:preloadError': VitePreloadErrorEvent
+}
